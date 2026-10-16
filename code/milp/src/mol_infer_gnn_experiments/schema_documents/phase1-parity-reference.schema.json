@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/phase1-parity-reference.schema.json",
+  "title": "Full-precision Phase 1 parity reference",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "reference_kind",
+    "standardized_prediction",
+    "precision",
+    "rounded",
+    "source_artifact_sha256",
+    "provenance_note"
+  ],
+  "properties": {
+    "schema_version": {"const": "phase1-parity-reference/1"},
+    "reference_kind": {"enum": ["full-precision-legacy-replay", "independent-raw-checkpoint"]},
+    "standardized_prediction": {"type": "number"},
+    "precision": {"const": "full"},
+    "rounded": {"const": false},
+    "source_artifact_sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+    "provenance_note": {"type": "string", "minLength": 1}
+  }
+}

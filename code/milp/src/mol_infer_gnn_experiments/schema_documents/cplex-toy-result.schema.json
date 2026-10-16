@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/cplex-toy-result.schema.json",
+  "title": "Non-scientific retained CPLEX CLI toy solve",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scientific_execution",
+    "attempt_id",
+    "cplex_executable",
+    "cplex_version",
+    "pulp_version",
+    "parameters",
+    "process_exit_code",
+    "stdout_path",
+    "stderr_path",
+    "cplex_log_path",
+    "model_path",
+    "solution_path",
+    "solution_file_exists",
+    "raw_cplex_termination_text",
+    "pulp_status",
+    "variable_values",
+    "objective_value",
+    "independent_verification",
+    "toy_solve_passed"
+  ],
+  "properties": {
+    "schema_version": {"const": "cplex-toy-result/1"},
+    "scientific_execution": {"const": false},
+    "attempt_id": {"type": "string", "pattern": "toy-cplex-[A-Za-z0-9_-]+"},
+    "cplex_executable": {"type": "string", "minLength": 1},
+    "cplex_version": {"type": "string", "pattern": "[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?"},
+    "pulp_version": {"type": "string", "minLength": 1},
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "threads",
+        "parallel_mode",
+        "random_seed",
+        "time_limit_seconds",
+        "relative_mip_gap",
+        "absolute_mip_gap",
+        "warm_start"
+      ],
+      "properties": {
+        "threads": {"const": 0},
+        "parallel_mode": {"const": "deterministic"},
+        "random_seed": {"const": 0},
+        "time_limit_seconds": {"type": "integer", "minimum": 1, "maximum": 30},
+        "relative_mip_gap": {"const": "0"},
+        "absolute_mip_gap": {"const": "0"},
+        "warm_start": {"const": false}
+      }
+    },
+    "process_exit_code": {"type": ["integer", "null"]},
+    "stdout_path": {"type": "string", "minLength": 1},
+    "stderr_path": {"type": "string", "minLength": 1},
+    "cplex_log_path": {"type": "string", "minLength": 1},
+    "model_path": {"type": "string", "minLength": 1},
+    "solution_path": {"type": "string", "minLength": 1},
+    "solution_file_exists": {"type": "boolean"},
+    "raw_cplex_termination_text": {"type": "string"},
+    "pulp_status": {"type": "string", "minLength": 1},
+    "variable_values": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": {"type": ["number", "null"]},
+        "y": {"type": ["number", "null"]}
+      }
+    },
+    "objective_value": {"type": ["number", "null"]},
+    "independent_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected_optimum", "feasible", "integral", "objective_matches"],
+      "properties": {
+        "expected_optimum": {"const": 3},
+        "feasible": {"type": "boolean"},
+        "integral": {"type": "boolean"},
+        "objective_matches": {"type": "boolean"}
+      }
+    },
+    "toy_solve_passed": {"type": "boolean"}
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/structural-specification.schema.json",
+  "title": "Structural specification interface",
+  "description": "Interface only. WP2 supplies no baseline or training-derived values.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "specification_id",
+    "derivation_class",
+    "topology",
+    "feature_registry_sha256",
+    "atom_valence_domain_sha256",
+    "fringe_library_sha256",
+    "interior_edge_pattern_registry_sha256",
+    "derivation",
+    "bounds"
+  ],
+  "properties": {
+    "schema_version": {"const": "structural-specification/1"},
+    "specification_id": {"type": "string", "pattern": "[A-Za-z0-9][A-Za-z0-9._-]{1,127}"},
+    "derivation_class": {"enum": ["legacy-fixed", "qm9-train-derived"]},
+    "topology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seed_graph_sha256", "core_topology_sha256", "rho"],
+      "properties": {
+        "seed_graph_sha256": {"$ref": "#/$defs/sha256"},
+        "core_topology_sha256": {"$ref": "#/$defs/sha256"},
+        "rho": {"type": "integer", "minimum": 0}
+      }
+    },
+    "feature_registry_sha256": {"$ref": "#/$defs/sha256"},
+    "atom_valence_domain_sha256": {"$ref": "#/$defs/sha256"},
+    "fringe_library_sha256": {"$ref": "#/$defs/sha256"},
+    "interior_edge_pattern_registry_sha256": {"$ref": "#/$defs/sha256"},
+    "derivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_sha256", "coverage_report_sha256"],
+      "properties": {
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "coverage_report_sha256": {"type": ["string", "null"], "pattern": "[0-9a-f]{64}"}
+      }
+    },
+    "bounds": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/bound"},
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+    "decimal": {"type": "string", "pattern": "-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?"},
+    "bound": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "feature_id", "lower", "upper", "unit"],
+      "properties": {
+        "family": {
+          "enum": [
+            "path_length",
+            "size",
+            "charge",
+            "degree",
+            "bond_multiplicity",
+            "fringe_count",
+            "interior_edge_pattern",
+            "aggregate_interior",
+            "aggregate_bond_order",
+            "leaf_edge_pattern",
+            "fringe_derived"
+          ]
+        },
+        "feature_id": {"type": "string", "minLength": 1},
+        "lower": {"$ref": "#/$defs/decimal"},
+        "upper": {"$ref": "#/$defs/decimal"},
+        "unit": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

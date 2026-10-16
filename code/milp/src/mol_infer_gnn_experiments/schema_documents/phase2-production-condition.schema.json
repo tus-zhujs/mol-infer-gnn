@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/phase2-production-condition.schema.json",
+  "title": "Canonical Phase 2 production condition record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "condition_id", "population", "instance_id",
+    "specification_id", "checkpoint_id", "checkpoint_sha256",
+    "target_property", "architecture_id", "model_depth", "hidden_width",
+    "range_index", "target_range_manifest_sha256",
+    "target_standardized_lower", "target_standardized_upper",
+    "target_lower_inclusive", "target_upper_inclusive", "target_unit",
+    "lower_inclusive", "upper_inclusive", "source_reference",
+    "excluded_from_final_statistics"
+  ],
+  "properties": {
+    "schema_version": {"const": "phase2-production-condition/1"},
+    "condition_id": {"type": "string", "pattern": "phase2-[0-9a-f]{20}"},
+    "population": {"enum": ["baseline", "guided"]},
+    "instance_id": {"enum": ["I1", "I2", "I3", "I4", "I5"]},
+    "specification_id": {"enum": ["baseline-i5-disabled-v1", "design-c-i5-prime-v1"]},
+    "checkpoint_id": {"type": "string", "minLength": 1},
+    "checkpoint_sha256": {"$ref": "#/$defs/sha256"},
+    "target_property": {"enum": ["homo", "lumo", "gap", "zpve"]},
+    "architecture_id": {"enum": ["gnn-d2-h16", "gnn-d2-h32", "gnn-d3-h16", "gnn-d3-h32"]},
+    "model_depth": {"enum": [2, 3]},
+    "hidden_width": {"enum": [16, 32]},
+    "range_index": {"type": "integer", "minimum": 1, "maximum": 10},
+    "target_range_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "target_standardized_lower": {"$ref": "#/$defs/decimal"},
+    "target_standardized_upper": {"$ref": "#/$defs/decimal"},
+    "target_lower_inclusive": {"$ref": "#/$defs/decimal"},
+    "target_upper_inclusive": {"$ref": "#/$defs/decimal"},
+    "target_unit": {"const": "eV"},
+    "lower_inclusive": {"const": true},
+    "upper_inclusive": {"const": true},
+    "source_reference": {"const": "data/phase2/target_ranges/target-range-manifest.json"},
+    "excluded_from_final_statistics": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+    "decimal": {"type": "string", "pattern": "-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?"}
+  }
+}

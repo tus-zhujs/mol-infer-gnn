@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/phase1-asset-inventory.schema.json",
+  "title": "Canonical Phase 1 asset inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "inventory_id",
+    "status",
+    "split_id",
+    "split_record",
+    "expected_checkpoint_ids",
+    "phase2_checkpoint_ids",
+    "checkpoint_records",
+    "canonical_objects",
+    "canonical_checkpoint_file_count",
+    "deduplicated_copies_avoided",
+    "live_parity_status",
+    "provenance_note"
+  ],
+  "properties": {
+    "schema_version": {"const": "phase1-asset-inventory/1"},
+    "inventory_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["pending", "ready"]},
+    "split_id": {"const": "qm9-seed42-v1"},
+    "split_record": {"$ref": "#/$defs/splitRecord"},
+    "expected_checkpoint_ids": {
+      "type": "array",
+      "minItems": 36,
+      "maxItems": 36,
+      "items": {"type": "string", "pattern": "journal_[a-z0-9_]+_[23]lay_h(16|32)"},
+      "uniqueItems": true
+    },
+    "phase2_checkpoint_ids": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "items": {"type": "string", "pattern": "journal_(homo|lumo|gap|zpve)_[23]lay_h(16|32)"},
+      "uniqueItems": true
+    },
+    "checkpoint_records": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/checkpointRecord"},
+      "uniqueItems": true
+    },
+    "canonical_objects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["destination_path", "sha256", "size_bytes", "logical_asset_ids"],
+        "properties": {
+          "destination_path": {"type": "string", "pattern": "[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*"},
+          "sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+          "size_bytes": {"type": "integer", "minimum": 1},
+          "logical_asset_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          }
+        }
+      },
+      "uniqueItems": true
+    },
+    "canonical_checkpoint_file_count": {"type": "integer", "minimum": 0},
+    "deduplicated_copies_avoided": {"type": "integer", "minimum": 0},
+    "live_parity_status": {"enum": ["pending-assets", "pending-parity", "passed", "failed"]},
+    "provenance_note": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+    "relativePath": {
+      "type": "string",
+      "pattern": "[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*"
+    },
+    "normalization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mean", "standard_deviation", "model_output_space", "target_unit", "source_unit", "conversion_factor"],
+      "properties": {
+        "mean": {"type": "string", "pattern": "-?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?"},
+        "standard_deviation": {"type": "string", "pattern": "[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?"},
+        "model_output_space": {"const": "standardized"},
+        "target_unit": {"type": "string", "minLength": 1},
+        "source_unit": {"type": "string", "minLength": 1},
+        "conversion_factor": {"type": "string", "pattern": "[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?"}
+      }
+    },
+    "architecture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["architecture_id", "family", "model_depth", "hidden_width", "input_features", "output_features", "activation", "negative_slope", "pooling", "dtype"],
+      "properties": {
+        "architecture_id": {"type": "string", "minLength": 1},
+        "family": {"enum": ["phase1-message-passing-v1", "legacy-two-level-gnn-v1"]},
+        "model_depth": {"enum": [2, 3]},
+        "hidden_width": {"enum": [16, 32]},
+        "input_features": {"type": "integer", "minimum": 1},
+        "output_features": {"const": 1},
+        "activation": {"const": "leaky-relu"},
+        "negative_slope": {"type": "string", "pattern": "0\\.[0-9]+"},
+        "pooling": {"enum": ["sum", "mean"]},
+        "dtype": {"enum": ["float32", "float64"]}
+      }
+    },
+    "splitRecord": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["logical_asset_id", "source_path", "original_filename", "source_sha256", "size_bytes", "split_id", "seed", "filtered_count", "train_count", "validation_count", "test_count", "test_order_sha256", "provenance_note", "destination_path", "destination_sha256"],
+      "properties": {
+        "logical_asset_id": {"const": "qm9-seed42-split-ledger"},
+        "source_path": {"$ref": "#/$defs/relativePath"},
+        "original_filename": {"type": "string", "pattern": "[A-Za-z0-9_.-]+"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "split_id": {"type": "string", "minLength": 1},
+        "seed": {"const": 42},
+        "filtered_count": {"type": "integer", "minimum": 1},
+        "train_count": {"type": "integer", "minimum": 1},
+        "validation_count": {"type": "integer", "minimum": 0},
+        "test_count": {"type": "integer", "minimum": 1},
+        "test_order_sha256": {"$ref": "#/$defs/sha256"},
+        "provenance_note": {"type": "string", "minLength": 1},
+        "destination_path": {"$ref": "#/$defs/relativePath"},
+        "destination_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "checkpointRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logical_asset_id", "source_path", "original_filename", "source_sha256", "size_bytes", "target_property", "architecture", "checkpoint_format", "state_dict_key", "split_id", "normalization", "phase2_selected", "provenance_note", "destination_path", "destination_sha256"],
+      "properties": {
+        "logical_asset_id": {"type": "string", "pattern": "journal_[a-z0-9_]+_[23]lay_h(16|32)"},
+        "source_path": {"$ref": "#/$defs/relativePath"},
+        "original_filename": {"type": "string", "pattern": "[A-Za-z0-9_.-]+"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "target_property": {"enum": ["mu", "alpha", "homo", "lumo", "gap", "r2", "zpve", "cv", "u0_atom"]},
+        "architecture": {"$ref": "#/$defs/architecture"},
+        "checkpoint_format": {"enum": ["pytorch-state-dict", "pytorch-wrapped-state-dict"]},
+        "state_dict_key": {"type": ["string", "null"]},
+        "split_id": {"type": "string", "minLength": 1},
+        "normalization": {"$ref": "#/$defs/normalization"},
+        "phase2_selected": {"type": "boolean"},
+        "provenance_note": {"type": "string", "minLength": 1},
+        "destination_path": {"$ref": "#/$defs/relativePath"},
+        "destination_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

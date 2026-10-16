@@ -1,0 +1,5 @@
+record_type,property,shared_accepted_graphs,mean_absolute_psi4_pyscf_difference_eV,median_absolute_psi4_pyscf_difference_eV,p90_absolute_psi4_pyscf_difference_eV,maximum_absolute_psi4_pyscf_difference_eV,signed_mean_psi4_minus_pyscf_eV,accepted_by_both,psi4_only,pyscf_only,rejected_by_both,connectivity_comparison_graphs,connectivity_preserved_both,connectivity_preserved_psi4_only,connectivity_preserved_pyscf_only,connectivity_preserved_neither
+property,HOMO,137,0.020341330773579337,0.019078595469657067,0.03242748198130805,0.10094674477918453,-0.0203380371506162,137,3,5,30,171,149,1,1,20
+property,LUMO,137,0.05036831271168816,0.029242007886808596,0.1425016988088553,0.30852762037071324,-0.049601897798219295,137,3,5,30,171,149,1,1,20
+property,GAP,137,0.0329146473230073,0.013472825846909231,0.10625194858462442,0.2714563016890388,-0.029263860647603123,137,3,5,30,171,149,1,1,20
+property,ZPVE,137,0.001556376366916318,0.0013220673497089663,0.003033342708976328,0.005712079985349838,-0.0007515124788071294,137,3,5,30,171,149,1,1,20

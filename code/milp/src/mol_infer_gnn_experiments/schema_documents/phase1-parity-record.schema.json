@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/phase1-parity-record.schema.json",
+  "title": "Full-precision Phase 1 prediction parity record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "molecule_id",
+    "checkpoint_id",
+    "checkpoint_sha256",
+    "raw_model_output",
+    "standardized_prediction",
+    "unstandardized_prediction",
+    "reference_kind",
+    "reference_legacy_prediction",
+    "absolute_discrepancy",
+    "relative_discrepancy",
+    "dtype",
+    "device",
+    "tolerance",
+    "passed"
+  ],
+  "properties": {
+    "schema_version": {"const": "phase1-parity-record/1"},
+    "molecule_id": {"type": "string", "minLength": 1},
+    "checkpoint_id": {"type": "string", "minLength": 1},
+    "checkpoint_sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+    "raw_model_output": {"type": "number"},
+    "standardized_prediction": {"type": "number"},
+    "unstandardized_prediction": {"type": "number"},
+    "reference_kind": {"enum": ["full-precision-legacy-replay", "independent-raw-checkpoint", "unavailable"]},
+    "reference_legacy_prediction": {"type": ["number", "null"]},
+    "absolute_discrepancy": {"type": ["number", "null"]},
+    "relative_discrepancy": {"type": ["number", "null"]},
+    "dtype": {"enum": ["float32", "float64"]},
+    "device": {"const": "cpu"},
+    "tolerance": {"const": 0.00001},
+    "passed": {"type": ["boolean", "null"]}
+  }
+}

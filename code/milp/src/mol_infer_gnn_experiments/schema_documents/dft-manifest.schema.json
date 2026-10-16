@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/dft-manifest.schema.json",
+  "title": "Gate-C-controlled DFT manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "candidate_freeze_sha256",
+    "gate_c_record_sha256",
+    "environment_locks",
+    "protocol_sha256",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {"const": "dft-manifest/1"},
+    "manifest_id": {"type": "string", "minLength": 1},
+    "candidate_freeze_sha256": {"$ref": "#/$defs/sha256"},
+    "gate_c_record_sha256": {"$ref": "#/$defs/sha256"},
+    "environment_locks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["psi4", "pyscf_geometric"],
+      "properties": {
+        "psi4": {"$ref": "#/$defs/sha256"},
+        "pyscf_geometric": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "protocol_sha256": {"$ref": "#/$defs/sha256"},
+    "entries": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/entry"},
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dft_id",
+        "candidate_id",
+        "canonical_graph_sha256",
+        "input_sdf_sha256",
+        "engine_role",
+        "reuse_decision",
+        "reuse_evidence_sha256"
+      ],
+      "properties": {
+        "dft_id": {"type": "string", "minLength": 1},
+        "candidate_id": {"type": "string", "minLength": 1},
+        "canonical_graph_sha256": {"$ref": "#/$defs/sha256"},
+        "input_sdf_sha256": {"$ref": "#/$defs/sha256"},
+        "engine_role": {"enum": ["primary", "replication"]},
+        "reuse_decision": {"enum": ["NEW_CALCULATION", "APPROVED_REUSE", "REUSE_REJECTED"]},
+        "reuse_evidence_sha256": {"type": ["string", "null"], "pattern": "[0-9a-f]{64}"}
+      }
+    }
+  }
+}

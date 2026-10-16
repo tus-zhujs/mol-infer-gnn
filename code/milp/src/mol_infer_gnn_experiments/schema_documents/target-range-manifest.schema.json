@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/target-range-manifest.schema.json",
+  "title": "Canonical training-derived target-range manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "derivation_version", "canonical",
+    "construction_population", "construction_partition_counts", "source",
+    "split", "normalization_source", "quantile_method", "interval_policy",
+    "architecture_specific", "specification_specific", "properties"
+  ],
+  "properties": {
+    "schema_version": {"const": "canonical-target-range-manifest/1"},
+    "derivation_version": {"const": "training-type7-05-95-ten-equal-v1"},
+    "canonical": {"const": true},
+    "construction_population": {"const": "fixed seed-42 training split only"},
+    "construction_partition_counts": {
+      "type": "object", "additionalProperties": false, "required": ["train"],
+      "properties": {"train": {"const": 110000}}
+    },
+    "source": {"$ref": "#/$defs/source"},
+    "split": {"$ref": "#/$defs/split"},
+    "normalization_source": {"$ref": "#/$defs/normalization"},
+    "quantile_method": {"$ref": "#/$defs/quantile"},
+    "interval_policy": {"$ref": "#/$defs/interval_policy"},
+    "architecture_specific": {"const": false},
+    "specification_specific": {"const": false},
+    "properties": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {"$ref": "#/$defs/property"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+    "decimal": {"type": "string", "pattern": "-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?"},
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repository_path", "sha256", "source_unit", "conversion_to_physical_unit"],
+      "properties": {
+        "repository_path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "source_unit": {"const": "hartree"},
+        "conversion_to_physical_unit": {"$ref": "#/$defs/decimal"}
+      }
+    },
+    "split": {
+      "type": "object", "additionalProperties": false,
+      "required": ["split_id", "repository_path", "sha256", "seed"],
+      "properties": {
+        "split_id": {"const": "qm9-seed42-v1"},
+        "repository_path": {"const": "data/phase1/qm9_split_seed42.csv"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "seed": {"const": 42}
+      }
+    },
+    "normalization": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repository_path", "sha256", "standard_deviation_definition"],
+      "properties": {
+        "repository_path": {"const": "data/phase1/asset-inventory.json"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "standard_deviation_definition": {"const": "sample; correction=1; n=110000"}
+      }
+    },
+    "quantile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "probabilities", "position", "arithmetic"],
+      "properties": {
+        "name": {"const": "Hyndman-Fan Type 7"},
+        "probabilities": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/decimal"}},
+        "position": {"const": "(n - 1) * p"},
+        "arithmetic": {"type": "string", "minLength": 1}
+      }
+    },
+    "interval_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["count", "equal_width_in", "lower_inclusive", "upper_inclusive", "adjacent_boundaries_shared"],
+      "properties": {
+        "count": {"const": 10},
+        "equal_width_in": {"const": "standardized_space"},
+        "lower_inclusive": {"const": true},
+        "upper_inclusive": {"const": true},
+        "adjacent_boundaries_shared": {"const": true}
+      }
+    },
+    "property": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "property", "physical_unit", "training_mean",
+        "training_sample_standard_deviation", "q0_05_standardized",
+        "q0_95_standardized", "standardized_interval_width",
+        "physical_interval_width", "ranges"
+      ],
+      "properties": {
+        "property": {"enum": ["homo", "lumo", "gap", "zpve"]},
+        "physical_unit": {"const": "eV"},
+        "training_mean": {"$ref": "#/$defs/decimal"},
+        "training_sample_standard_deviation": {"$ref": "#/$defs/decimal"},
+        "q0_05_standardized": {"$ref": "#/$defs/decimal"},
+        "q0_95_standardized": {"$ref": "#/$defs/decimal"},
+        "standardized_interval_width": {"$ref": "#/$defs/decimal"},
+        "physical_interval_width": {"$ref": "#/$defs/decimal"},
+        "ranges": {
+          "type": "array", "minItems": 10, "maxItems": 10,
+          "items": {"$ref": "#/$defs/range"}
+        }
+      }
+    },
+    "range": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "range_index", "standardized_lower", "standardized_upper",
+        "physical_lower", "physical_upper", "lower_inclusive", "upper_inclusive"
+      ],
+      "properties": {
+        "range_index": {"type": "integer", "minimum": 1, "maximum": 10},
+        "standardized_lower": {"$ref": "#/$defs/decimal"},
+        "standardized_upper": {"$ref": "#/$defs/decimal"},
+        "physical_lower": {"$ref": "#/$defs/decimal"},
+        "physical_upper": {"$ref": "#/$defs/decimal"},
+        "lower_inclusive": {"const": true},
+        "upper_inclusive": {"const": true}
+      }
+    }
+  }
+}

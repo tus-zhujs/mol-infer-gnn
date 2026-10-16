@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/verification-record.schema.json",
+  "title": "Post-solve verification record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "condition_id",
+    "attempt_id",
+    "raw_termination_sha256",
+    "has_incumbent",
+    "checks",
+    "all_mandatory_checks_passed",
+    "normalized_status",
+    "candidate_artifact_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "verification-record/1"},
+    "condition_id": {"type": "string", "minLength": 1},
+    "attempt_id": {"type": "string", "pattern": "attempt-[0-9]{4}"},
+    "raw_termination_sha256": {"$ref": "#/$defs/sha256"},
+    "has_incumbent": {"type": "boolean"},
+    "checks": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/check"},
+      "uniqueItems": true
+    },
+    "all_mandatory_checks_passed": {"type": "boolean"},
+    "normalized_status": {
+      "enum": [
+        "VERIFIED_CANDIDATE",
+        "INFEASIBLE_CERTIFIED",
+        "TIMEOUT_NO_CANDIDATE",
+        "SOLVER_ERROR",
+        "MEMORY_ERROR",
+        "POSTSOLVE_REJECTED",
+        "INFRASTRUCTURE_ERROR"
+      ]
+    },
+    "candidate_artifact_sha256": {"type": ["string", "null"], "pattern": "[0-9a-f]{64}"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["check_id", "mandatory", "passed", "evidence_sha256"],
+      "properties": {
+        "check_id": {
+          "enum": [
+            "required_variables",
+            "integrality",
+            "variable_bounds",
+            "linear_constraints",
+            "structural_reconstruction",
+            "graph_identity",
+            "predictor_equivalence",
+            "target_membership",
+            "provenance"
+          ]
+        },
+        "mandatory": {"const": true},
+        "passed": {"type": "boolean"},
+        "evidence_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

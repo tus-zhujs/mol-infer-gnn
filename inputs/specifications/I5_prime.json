@@ -1,0 +1,104 @@
+{
+  "specification_id": "design-c-i5-prime-v1",
+  "base_instance": "I5.txt",
+  "fringe_library": "I5-fringe.txt",
+  "implementation": "../../code/milp/src/mol_infer_gnn_experiments/phase2/specification.py",
+  "allowed_interior_patterns": [
+    [
+      "C4",
+      "C4",
+      1
+    ],
+    [
+      "C4",
+      "C4",
+      2
+    ],
+    [
+      "C4",
+      "C4",
+      3
+    ],
+    [
+      "C4",
+      "N3",
+      1
+    ],
+    [
+      "C4",
+      "N3",
+      2
+    ],
+    [
+      "C4",
+      "O2",
+      1
+    ],
+    [
+      "N3",
+      "O2",
+      1
+    ]
+  ],
+  "interior_upper_bounds": [
+    {
+      "pattern": [
+        "C4",
+        "C4",
+        3
+      ],
+      "upper": 1
+    },
+    {
+      "pattern": [
+        "C4",
+        "N3",
+        2
+      ],
+      "upper": 3
+    },
+    {
+      "pattern": [
+        "N3",
+        "O2",
+        1
+      ],
+      "upper": 1
+    }
+  ],
+  "leaf_upper_bounds": [
+    {
+      "pattern": [
+        "C4",
+        "C4",
+        3
+      ],
+      "upper": 2
+    },
+    {
+      "pattern": [
+        "C4",
+        "N3",
+        2
+      ],
+      "upper": 1
+    },
+    {
+      "pattern": [
+        "C4",
+        "N3",
+        3
+      ],
+      "upper": 2
+    },
+    {
+      "pattern": [
+        "C4",
+        "O2",
+        2
+      ],
+      "upper": 2
+    }
+  ],
+  "leaf_orientation_rule": "Sum unlike orientations; count identical atom-label pairs once."
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/raw-solver-termination.schema.json",
+  "title": "Raw solver termination evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "engine",
+    "engine_version",
+    "native_status",
+    "native_code",
+    "termination_reason",
+    "has_incumbent",
+    "incumbent_count",
+    "best_bound",
+    "relative_gap",
+    "wall_seconds",
+    "cpu_seconds",
+    "exception"
+  ],
+  "properties": {
+    "schema_version": {"const": "raw-solver-termination/1"},
+    "engine": {"const": "CPLEX"},
+    "engine_version": {"type": "string", "minLength": 1},
+    "native_status": {"type": "string", "minLength": 1},
+    "native_code": {"type": ["integer", "string", "null"]},
+    "termination_reason": {
+      "enum": [
+        "OPTIMAL",
+        "INTEGER_INFEASIBLE",
+        "TIME_LIMIT",
+        "MEMORY_LIMIT",
+        "INTERRUPTED",
+        "SOLVER_FAILURE",
+        "INFRASTRUCTURE_FAILURE",
+        "UNKNOWN"
+      ]
+    },
+    "has_incumbent": {"type": "boolean"},
+    "incumbent_count": {"type": "integer", "minimum": 0},
+    "best_bound": {"type": ["number", "null"]},
+    "relative_gap": {"type": ["number", "null"], "minimum": 0},
+    "wall_seconds": {"type": "number", "minimum": 0},
+    "cpu_seconds": {"type": "number", "minimum": 0},
+    "exception": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "class": {"type": "string", "minLength": 1},
+        "message": {"type": "string"},
+        "traceback_sha256": {"type": ["string", "null"], "pattern": "[0-9a-f]{64}"}
+      }
+    }
+  }
+}

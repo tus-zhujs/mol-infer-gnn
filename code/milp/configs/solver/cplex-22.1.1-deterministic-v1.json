@@ -1,0 +1,21 @@
+{
+  "schema_version": "solver-parameters/1",
+  "profile_id": "cplex-22.1.1-deterministic-v1",
+  "engine": "CPLEX",
+  "engine_version": "22.1.1",
+  "time_limit_seconds": 3600,
+  "threads": 0,
+  "parallel_mode": "deterministic",
+  "random_seed": 0,
+  "mip_integrality_tolerance": "1e-9",
+  "primal_feasibility_tolerance": "1e-8",
+  "relative_mip_gap": "0",
+  "absolute_mip_gap": "0",
+  "numerical_emphasis": true,
+  "mip_emphasis": 1,
+  "presolve": "explicit-on",
+  "warm_start": false,
+  "parameter_display": true,
+  "capture_all_live_parameters": true,
+  "live_parameter_capture_sha256": null
+}

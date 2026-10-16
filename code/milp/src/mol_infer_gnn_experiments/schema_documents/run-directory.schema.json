@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/run-directory.schema.json",
+  "title": "Immutable run-attempt directory record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "campaign_id",
+    "condition_id",
+    "attempt_id",
+    "attempt_number",
+    "state",
+    "created_at",
+    "retry_of",
+    "retry_reason",
+    "required_artifacts"
+  ],
+  "properties": {
+    "schema_version": {"const": "run-directory/1"},
+    "campaign_id": {"type": "string", "pattern": "[A-Za-z0-9][A-Za-z0-9._-]{2,127}"},
+    "condition_id": {"type": "string", "pattern": "[A-Za-z0-9][A-Za-z0-9._-]{2,127}"},
+    "attempt_id": {"type": "string", "pattern": "attempt-[0-9]{4}"},
+    "attempt_number": {"type": "integer", "minimum": 1},
+    "state": {"enum": ["CLAIMED", "INCOMPLETE", "COMPLETED", "QUARANTINED"]},
+    "created_at": {"type": "string", "minLength": 1},
+    "retry_of": {"type": ["string", "null"], "pattern": "attempt-[0-9]{4}"},
+    "retry_reason": {"type": ["string", "null"]},
+    "required_artifacts": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*"},
+      "uniqueItems": true
+    }
+  }
+}

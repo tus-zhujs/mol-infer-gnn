@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/condition-manifest.schema.json",
+  "title": "Canonical Phase 2 condition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "campaign_id",
+    "condition_id",
+    "specification_id",
+    "specification_sha256",
+    "property",
+    "target",
+    "model_id",
+    "checkpoint_sha256",
+    "model_config_sha256",
+    "split_id",
+    "formulation_version",
+    "solver_profile_id",
+    "attempt_policy",
+    "random_seeds",
+    "expected_input_hashes"
+  ],
+  "properties": {
+    "schema_version": {"const": "phase2-condition/1"},
+    "campaign_id": {"type": "string", "pattern": "[A-Za-z0-9][A-Za-z0-9._-]{2,127}"},
+    "condition_id": {"type": "string", "pattern": "[A-Za-z0-9][A-Za-z0-9._-]{2,127}"},
+    "specification_id": {"type": "string", "pattern": "[A-Za-z0-9][A-Za-z0-9._-]{1,127}"},
+    "specification_sha256": {"$ref": "#/$defs/sha256"},
+    "property": {"type": "string", "minLength": 1},
+    "target": {"$ref": "#/$defs/target"},
+    "model_id": {"type": "string", "minLength": 1},
+    "checkpoint_sha256": {"$ref": "#/$defs/sha256"},
+    "model_config_sha256": {"$ref": "#/$defs/sha256"},
+    "split_id": {"type": "string", "minLength": 1},
+    "formulation_version": {"type": "string", "minLength": 1},
+    "solver_profile_id": {"type": "string", "minLength": 1},
+    "attempt_policy": {"enum": ["single-primary-attempt"]},
+    "random_seeds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["python", "numpy", "torch", "solver"],
+      "properties": {
+        "python": {"type": "integer", "minimum": 0},
+        "numpy": {"type": "integer", "minimum": 0},
+        "torch": {"type": "integer", "minimum": 0},
+        "solver": {"type": "integer", "minimum": 0}
+      }
+    },
+    "expected_input_hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "feature_registry",
+        "asset_manifest",
+        "solver_profile"
+      ],
+      "properties": {
+        "environment": {"$ref": "#/$defs/sha256"},
+        "feature_registry": {"$ref": "#/$defs/sha256"},
+        "asset_manifest": {"$ref": "#/$defs/sha256"},
+        "solver_profile": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+    "decimal": {"type": "string", "pattern": "-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?"},
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lower", "upper", "unit", "lower_inclusive", "upper_inclusive"],
+      "properties": {
+        "lower": {"$ref": "#/$defs/decimal"},
+        "upper": {"$ref": "#/$defs/decimal"},
+        "unit": {"type": "string", "minLength": 1},
+        "lower_inclusive": {"const": true},
+        "upper_inclusive": {"const": true}
+      }
+    }
+  }
+}

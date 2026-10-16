@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/external-tool-declaration.schema.json",
+  "title": "Declared external executable interface",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "tool_id",
+    "executable_name",
+    "environment_variable",
+    "expected_version",
+    "absolute_path_policy",
+    "installation_policy",
+    "license_policy"
+  ],
+  "properties": {
+    "schema_version": {"const": "external-tool-declaration/1"},
+    "tool_id": {"const": "cplex-cli"},
+    "executable_name": {"const": "cplex"},
+    "environment_variable": {"const": "MOL_INFER_GNN_CPLEX_BIN"},
+    "expected_version": {"const": "22.1.1"},
+    "absolute_path_policy": {"const": "explicit-runtime-declaration"},
+    "installation_policy": {"const": "external-read-only"},
+    "license_policy": {"const": "external-secret"}
+  }
+}

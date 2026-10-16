@@ -1,0 +1,2 @@
+# PuLP dependency only; other scientific dependencies are described in the root README.
+PuLP==2.6.0

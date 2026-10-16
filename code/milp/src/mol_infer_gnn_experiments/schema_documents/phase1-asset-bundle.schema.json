@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/phase1-asset-bundle.schema.json",
+  "title": "Phase 1 approved transfer bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "bundle_id",
+    "bundle_kind",
+    "split",
+    "checkpoints"
+  ],
+  "properties": {
+    "schema_version": {"const": "phase1-asset-bundle/1"},
+    "bundle_id": {"type": "string", "minLength": 1},
+    "bundle_kind": {"enum": ["approved-live", "test-fixture"]},
+    "split": {"$ref": "#/$defs/split"},
+    "checkpoints": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/checkpoint"},
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+    "relativePath": {
+      "type": "string",
+      "pattern": "[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*"
+    },
+    "normalization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mean",
+        "standard_deviation",
+        "model_output_space",
+        "target_unit",
+        "source_unit",
+        "conversion_factor"
+      ],
+      "properties": {
+        "mean": {"type": "string", "pattern": "-?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?"},
+        "standard_deviation": {"type": "string", "pattern": "[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?"},
+        "model_output_space": {"const": "standardized"},
+        "target_unit": {"type": "string", "minLength": 1},
+        "source_unit": {"type": "string", "minLength": 1},
+        "conversion_factor": {"type": "string", "pattern": "[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?"}
+      }
+    },
+    "architecture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "architecture_id",
+        "family",
+        "model_depth",
+        "hidden_width",
+        "input_features",
+        "output_features",
+        "activation",
+        "negative_slope",
+        "pooling",
+        "dtype"
+      ],
+      "properties": {
+        "architecture_id": {"type": "string", "minLength": 1},
+        "family": {"enum": ["phase1-message-passing-v1", "legacy-two-level-gnn-v1"]},
+        "model_depth": {"enum": [2, 3]},
+        "hidden_width": {"enum": [16, 32]},
+        "input_features": {"type": "integer", "minimum": 1},
+        "output_features": {"const": 1},
+        "activation": {"const": "leaky-relu"},
+        "negative_slope": {"type": "string", "pattern": "0\\.[0-9]+"},
+        "pooling": {"enum": ["sum", "mean"]},
+        "dtype": {"enum": ["float32", "float64"]}
+      }
+    },
+    "split": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logical_asset_id",
+        "source_path",
+        "original_filename",
+        "source_sha256",
+        "size_bytes",
+        "split_id",
+        "seed",
+        "filtered_count",
+        "train_count",
+        "validation_count",
+        "test_count",
+        "test_order_sha256",
+        "provenance_note"
+      ],
+      "properties": {
+        "logical_asset_id": {"const": "qm9-seed42-split-ledger"},
+        "source_path": {"$ref": "#/$defs/relativePath"},
+        "original_filename": {"type": "string", "pattern": "[A-Za-z0-9_.-]+"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "split_id": {"type": "string", "minLength": 1},
+        "seed": {"const": 42},
+        "filtered_count": {"type": "integer", "minimum": 1},
+        "train_count": {"type": "integer", "minimum": 1},
+        "validation_count": {"type": "integer", "minimum": 1},
+        "test_count": {"type": "integer", "minimum": 1},
+        "test_order_sha256": {"$ref": "#/$defs/sha256"},
+        "provenance_note": {"type": "string", "minLength": 1}
+      }
+    },
+    "checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logical_asset_id",
+        "source_path",
+        "original_filename",
+        "source_sha256",
+        "size_bytes",
+        "target_property",
+        "architecture",
+        "checkpoint_format",
+        "state_dict_key",
+        "split_id",
+        "normalization",
+        "phase2_selected",
+        "provenance_note"
+      ],
+      "properties": {
+        "logical_asset_id": {"type": "string", "pattern": "journal_[a-z0-9_]+_[23]lay_h(16|32)"},
+        "source_path": {"$ref": "#/$defs/relativePath"},
+        "original_filename": {"type": "string", "pattern": "[A-Za-z0-9_.-]+"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "target_property": {"enum": ["mu", "alpha", "homo", "lumo", "gap", "r2", "zpve", "cv", "u0_atom"]},
+        "architecture": {"$ref": "#/$defs/architecture"},
+        "checkpoint_format": {"enum": ["pytorch-state-dict", "pytorch-wrapped-state-dict"]},
+        "state_dict_key": {"type": ["string", "null"]},
+        "split_id": {"type": "string", "minLength": 1},
+        "normalization": {"$ref": "#/$defs/normalization"},
+        "phase2_selected": {"type": "boolean"},
+        "provenance_note": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

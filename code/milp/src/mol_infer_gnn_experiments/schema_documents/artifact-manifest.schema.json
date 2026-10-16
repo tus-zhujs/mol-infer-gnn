@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mol-infer-gnn.invalid/schemas/artifact-manifest.schema.json",
+  "title": "Content-addressed artifact manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "manifest_id", "root_kind", "artifacts"],
+  "properties": {
+    "schema_version": {"const": "artifact-manifest/1"},
+    "manifest_id": {"type": "string", "minLength": 1},
+    "root_kind": {"enum": ["repository", "attempt", "candidate-freeze", "dft"]},
+    "artifacts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/artifact"},
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size_bytes", "media_type", "required"],
+      "properties": {
+        "path": {"type": "string", "pattern": "[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*"},
+        "sha256": {"type": "string", "pattern": "[0-9a-f]{64}"},
+        "size_bytes": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "minLength": 1},
+        "required": {"type": "boolean"}
+      }
+    }
+  }
+}
