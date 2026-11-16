@@ -1,0 +1,35 @@
+{
+  "construction_inputs": {
+    "baseline_i5_graphs_read": false,
+    "checkpoint_predictions_read": false,
+    "partitions_read": [
+      "train"
+    ],
+    "test_read": false,
+    "validation_read": false
+  },
+  "derivation_version": "training-type7-05-95-ten-equal-v1",
+  "implementation": [
+    {
+      "sha256": "8df3d5162bab9bf87d6f9216b167183a89efd8e2883963f8bb2ffacb1a3cbf1a",
+      "original_filename": "target_ranges.py"
+    },
+    {
+      "sha256": "c8b3b93395e1eef8e0145519d697364d21f4d902180ec7f253984bfb1fcad389",
+      "original_filename": "regenerate_target_ranges.py"
+    }
+  ],
+  "legacy_manual_ranges": {
+    "archived_path": "data/phase2/conditions/legacy-manual-target-conditions.jsonl",
+    "used_for_range_construction": false
+  },
+  "migrated_target_source": {
+    "purpose": "full-precision Phase 1 per-molecule target values",
+    "source_sha256": "73a67793e3cfa9660f001278bd019c143f57e4785db537a01811cf2ce72aa7eb",
+    "transformation": "byte-exact copy",
+    "original_filename": "qm9_complete_values.csv"
+  },
+  "range_construction_complete_before_descriptive_access": true,
+  "schema_version": "target-range-derivation/1",
+  "target_range_manifest_sha256": "9a198f8dd61adb5b14299b78e7bb3f6d9313e4d8ef438da3b866cf78fc3371fd"
+}

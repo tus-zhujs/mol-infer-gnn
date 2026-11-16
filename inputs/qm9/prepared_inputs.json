@@ -1,0 +1,30 @@
+{
+  "files": [
+    {
+      "filename": "qm9_all.sdf",
+      "size_bytes": 235434378,
+      "sha256": "98c4e97d50ac549b8c9f0b2114b348a9a944718e17e50d9a724b729f1deaa28e",
+      "path": "qm9_all.sdf.gz",
+      "compression": "gzip",
+      "compressed_size_bytes": 30975638,
+      "compressed_sha256": "7a8f4c59c815ed8340f0c935cc351a00be3fc5d43ec549bad132ecaf1db8f5a6"
+    },
+    {
+      "filename": "qm9_complete_values.csv",
+      "size_bytes": 27685401,
+      "sha256": "73a67793e3cfa9660f001278bd019c143f57e4785db537a01811cf2ce72aa7eb",
+      "path": "qm9_complete_values.csv"
+    },
+    {
+      "filename": "qm9_uncharacterized.csv",
+      "size_bytes": 248351,
+      "sha256": "77dfcc80bc73a811f811b9c5a7de17d2770fabfad9dbbc591a7feb30947e5095",
+      "path": "qm9_uncharacterized.csv"
+    }
+  ],
+  "split_ledger": "../qm9_split_seed42.csv",
+  "normalization": "normalization.csv",
+  "reader": "../../code/gnn/common_eval/qm9_data.py",
+  "training_preprocessing": "../../code/gnn/GNN_main_qm9.py",
+  "distribution": "Prepared inputs are included at the recorded paths. Sizes and SHA-256 values refer to uncompressed files; compressed metadata is recorded separately for the SDF."
+}

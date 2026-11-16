@@ -157,12 +157,8 @@ def _input_hash_record(
     )
     instance_id = condition["instance_id"]
     files = {
-        "checkpoint": repository_root
-        / "data/phase1"
-        / checkpoint["destination_path"],
-        "normalization_config": repository_root
-        / "data/phase1"
-        / config["destination_path"],
+        "checkpoint": repository_root.parents[1] / checkpoint["path"],
+        "normalization_config": repository_root.parents[1] / config["path"],
         "structural_instance": instance_root / f"{instance_id}.txt",
         "fringe_library": instance_root / f"{instance_id}-fringe.txt",
     }
@@ -179,7 +175,7 @@ def _input_hash_record(
         "schema_version": "phase2-attempt-input-hashes/1",
         "assets": {
             name: {
-                "path": path.relative_to(repository_root).as_posix(),
+                "path": path.relative_to(repository_root.parents[1]).as_posix(),
                 "sha256": sha256_file(path),
                 "size_bytes": path.stat().st_size,
             }
@@ -194,11 +190,11 @@ def _select_attempt(
     *,
     run_root: Path,
     campaign_id: str,
-    condition_id: str,
+    condition_directory: str,
     retry_after_attempt: str | None = None,
     retry_reason: str | None = None,
 ) -> tuple[Path | None, int, str | None, str | None]:
-    condition_root = run_root / campaign_id / condition_id
+    condition_root = run_root / campaign_id / condition_directory
     prior = sorted(condition_root.glob("attempt-[0-9][0-9][0-9][0-9]"))
     completed = [
         path
@@ -245,11 +241,16 @@ def run_condition(
     repository_root = repository_root.resolve(strict=True)
     executable = executable.resolve(strict=True)
     condition_id = condition["condition_id"]
+    specification = "I5-prime" if condition["population"] == "guided" else condition["instance_id"]
+    condition_directory = (
+        f"{specification}-{condition['target_property']}-"
+        f"{condition['architecture_id']}-range-{condition['range_index']:02d}"
+    )
     if resume:
         completed, number, retry_of, retry_reason = _select_attempt(
             run_root=run_root,
             campaign_id=campaign_id,
-            condition_id=condition_id,
+            condition_directory=condition_directory,
             retry_after_attempt=condition.get("retry_after_attempt"),
             retry_reason=condition.get("retry_reason"),
         )
@@ -265,6 +266,7 @@ def run_condition(
         condition_id,
         number,
         required_artifacts=_REQUIRED,
+        condition_directory=condition_directory,
         retry_of=retry_of,
         retry_reason=retry_reason,
     )

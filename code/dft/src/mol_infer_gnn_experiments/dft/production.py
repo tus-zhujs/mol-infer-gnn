@@ -327,7 +327,8 @@ def _pyscf_workflow(
 def _completed_result(
     entry: dict[str, Any], output_root: Path
 ) -> dict[str, Any] | None:
-    run_root = output_root / "dft_runs" / entry["engine"] / entry["graph_id"]
+    graph_directory = "-".join(entry["graph_id"].split("-")[:2])
+    run_root = output_root / "dft_runs" / entry["engine"] / graph_directory
     completion = run_root / "COMPLETED.json"
     result_path = run_root / "result.json"
     if not completion.is_file() or not result_path.is_file():
@@ -371,7 +372,8 @@ def _run_entry(
 ) -> dict[str, Any]:
     engine = entry["engine"]
     graph_id = entry["graph_id"]
-    run_root = output_root / "dft_runs" / engine / graph_id
+    graph_directory = "-".join(graph_id.split("-")[:2])
+    run_root = output_root / "dft_runs" / engine / graph_directory
     completion = run_root / "COMPLETED.json"
     result_path = run_root / "result.json"
     prior_result = _completed_result(entry, output_root)

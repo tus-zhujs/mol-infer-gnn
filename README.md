@@ -22,6 +22,9 @@ Earlier implementations of molecular inference methods are available in the [mol
 | [`results/`](results/) | GNN performance, MILP outcomes, molecular candidates, and DFT results |
 | [`results/canonical/`](results/canonical/) | Summary tables for the experimental comparisons |
 | [`results/molecules/`](results/molecules/) | Generated molecular structures in SDF format |
+| [`results/dft_optimized/`](results/dft_optimized/) | 342 optimized structures, indexed by graph and engine |
+| [`results/milp_records/`](results/milp_records/) | Original solver status, parameters, candidates and verification records |
+| [`results/figure12/`](results/figure12/) | Current eight-molecule selection and drawing assets |
 
 Code guides: [GNN](code/gnn/README.md) · [MILP](code/milp/README.md) · [DFT](code/dft/README.md).
 
@@ -36,13 +39,13 @@ The repository includes the results of the following experiments:
 - **Molecular candidates:** 178 candidate records corresponding to 175 distinct molecular graphs.
 - **DFT evaluation:** Psi4 and PySCF calculations for the 175 molecular graphs.
 
-The main results are available in the CSV files under [`results/`](results/), while the corresponding molecular structures are provided under [`results/molecules/`](results/molecules/).
+The main results are available in the CSV files under [`results/`](results/), while the corresponding molecular structures are provided under [`results/molecules/`](results/molecules/). The original `milp_records/` statuses precede the compact-domain recheck in `candidate_verification.csv`; keep these two stages separate. The reported LLR table is in `results/llr/`; its original fit/prediction files are unavailable.
 
 ## Trained Models
 
-The 16 GNN checkpoints used for MILP inverse design are included in [`models/checkpoints/`](models/checkpoints/). These models cover HOMO, LUMO, HOMO–LUMO gap, and zero-point vibrational energy (ZPVE), with four architectures for each property.
+All 36 GNN checkpoints (nine properties × four architectures) are included in [`models/checkpoints/`](models/checkpoints/). The HOMO, LUMO, gap and ZPVE subset contains the 16 models used for MILP inverse design.
 
-Model configurations and additional information are provided in [`models/`](models/).
+Model configurations and filename mappings are provided in [`models/`](models/). Prepared-QM9 file identifiers and normalization are in [`inputs/qm9/`](inputs/qm9/).
 
 ## Dependencies
 

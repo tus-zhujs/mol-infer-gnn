@@ -65,6 +65,7 @@ def build_common_formulation(
 
     root = repository_root.resolve(strict=True)
     asset_root = root / "data/phase1"
+    package_root = root.parents[1]
     checkpoint_records, config_records = _asset_records(asset_root)
     checkpoint_id = condition["checkpoint_id"]
     checkpoint = checkpoint_records[checkpoint_id]
@@ -102,8 +103,8 @@ def build_common_formulation(
     model_loader = GNNModelLoader.from_dict(
         {
             "name": checkpoint_id,
-            "model_filename": str(asset_root / checkpoint["destination_path"]),
-            "config_filename": str(asset_root / config["destination_path"]),
+            "model_filename": str(package_root / checkpoint["path"]),
+            "config_filename": str(package_root / config["path"]),
         }
     )
     inverter = create_inverter(model_loader.type, checkpoint_id)

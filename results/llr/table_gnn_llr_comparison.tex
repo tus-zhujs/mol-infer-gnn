@@ -1,0 +1,27 @@
+\begin{table*}[t!]
+\centering
+\caption{Comparison between \GNN\ and the descriptor-based LLR model on
+the common QM9 test set.
+For each property, the reported \GNN\ model is the one with the lowest
+observed test MAE among the four architectures.
+Each performance entry reports MAE / $R^2$.}
+\label{tab:gnn-llr-comparison}
+
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}llccc@{}}
+\toprule
+Property & Unit & GNN model & GNN MAE / $R^2$ & LLR MAE / $R^2$ \\
+\midrule
+$\smu$    & D                         & MP3-32 & 0.486 / 0.7595 & 0.759 / 0.538 \\
+$\sAlpha$ & bohr$^3$                  & MP2-32 & 0.456 / 0.9912 & 0.898 / 0.975 \\
+$\sHomo$  & eV                        & MP3-32 & 0.114 / 0.9241 & 0.223 / 0.774 \\
+$\sLumo$  & eV                        & MP3-32 & 0.122 / 0.9827 & 0.364 / 0.873 \\
+$\sGap$   & eV                        & MP3-32 & 0.175 / 0.9627 & 0.433 / 0.820 \\
+$\sRR$    & bohr$^2$                  & MP3-32 & 29.54 / 0.9682 & 75.57 / 0.849 \\
+$\sZPVE$  & eV                        & MP3-32 & 0.011 / 0.9996 & 0.0167 / 0.999 \\
+$\sCv$    & cal mol$^{-1}$ K$^{-1}$  & MP3-32 & 0.207 / 0.9942 & 0.461 / 0.977 \\
+$\sUz$    & eV                        & MP2-32 & 0.217 / 0.9990 & 1.517 / 0.952 \\
+\bottomrule
+\end{tabular}
+\end{table*}

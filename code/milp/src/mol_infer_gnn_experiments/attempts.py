@@ -54,16 +54,16 @@ def _checked_id(value: str, label: str) -> str:
 
 
 def attempt_path(
-    run_root: Path, campaign_id: str, condition_id: str, attempt_number: int
+    run_root: Path, campaign_id: str, condition_directory: str, attempt_number: int
 ) -> Path:
     if attempt_number < 1 or attempt_number > 9999:
         raise ContractError("attempt number must be in 1..9999")
     campaign_id = _checked_id(campaign_id, "campaign_id")
-    condition_id = _checked_id(condition_id, "condition_id")
+    condition_directory = _checked_id(condition_directory, "condition_directory")
     return (
         Path(run_root)
         / campaign_id
-        / condition_id
+        / condition_directory
         / f"attempt-{attempt_number:04d}"
     )
 
@@ -75,10 +75,11 @@ def claim_attempt(
     attempt_number: int,
     *,
     required_artifacts: list[str],
+    condition_directory: str,
     retry_of: str | None = None,
     retry_reason: str | None = None,
 ) -> Path:
-    path = attempt_path(run_root, campaign_id, condition_id, attempt_number)
+    path = attempt_path(run_root, campaign_id, condition_directory, attempt_number)
     if (retry_of is None) != (retry_reason is None):
         raise ContractError("retry_of and retry_reason must be supplied together")
     if retry_of is not None and re.fullmatch(r"attempt-[0-9]{4}", retry_of) is None:

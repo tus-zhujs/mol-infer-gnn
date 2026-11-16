@@ -34,7 +34,7 @@ from common_eval.qm9_data import (
 SCRIPT_DIR = Path(__file__).resolve().parent
 WORKSPACE = SCRIPT_DIR.parent.parent
 PROCEEDING_MODEL_DIR = WORKSPACE / "proceeding" / "model"
-JOURNAL_MODEL_DIR = SCRIPT_DIR / "model"
+JOURNAL_MODEL_DIR = WORKSPACE / "models"
 OUTPUT_MARKER = ".common_split_evaluation_output"
 OUTPUT_MARKER_CONTENT = "mol-infer-gnn common-split evaluation output\n"
 BATCH_CONSISTENCY_RTOL = 1e-5
@@ -147,6 +147,8 @@ def prepare_output_directory(path: Path, overwrite: bool) -> None:
 def checkpoint_inventory(selected_model_ids: set[str] | None = None) -> list[dict[str, object]]:
     selected_model_ids = selected_model_ids or set()
     rows: list[dict[str, object]] = []
+    with (JOURNAL_MODEL_DIR / "checkpoint_mapping.csv").open(newline="", encoding="utf-8") as handle:
+        journal_models = {row["model_id"]: row for row in csv.DictReader(handle)}
     for prop, prefix in (("homo", "3_homo"), ("lumo", "4_lumo"), ("gap", "5_gap")):
         for hidden in (16, 32):
             path = PROCEEDING_MODEL_DIR / f"{prefix}_GNN{hidden}.pth"
@@ -165,10 +167,10 @@ def checkpoint_inventory(selected_model_ids: set[str] | None = None) -> list[dic
             })
         for layers in (2, 3):
             for hidden in (16, 32):
-                stem = f"{prefix}_{layers}lay_h{hidden}_nodropout"
-                path = JOURNAL_MODEL_DIR / f"{stem}.pth"
-                config = JOURNAL_MODEL_DIR / f"{stem}_config.txt"
                 model_id = f"journal_{prop}_{layers}lay_h{hidden}"
+                mapping = journal_models[model_id]
+                path = JOURNAL_MODEL_DIR / mapping["checkpoint"]
+                config = JOURNAL_MODEL_DIR / mapping["configuration"]
                 rows.append({
                     "model_id": model_id,
                     "era": "journal",

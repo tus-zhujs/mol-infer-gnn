@@ -1,0 +1,1 @@
+{"best_bound":null,"cpu_seconds":0.0,"engine":"CPLEX","engine_version":"22.1.1","exception":null,"has_incumbent":false,"incumbent_count":0,"native_code":null,"native_status":"TIME_LIMIT","relative_gap":null,"schema_version":"raw-solver-termination/1","termination_reason":"TIME_LIMIT","wall_seconds":3603.1269230041653}

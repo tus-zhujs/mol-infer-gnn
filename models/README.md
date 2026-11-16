@@ -1,20 +1,9 @@
 # Trained models
 
-The 16 raw PyTorch checkpoints used in Phase 2 are included in `checkpoints/`.
-They total **146,702,942 bytes** (about 146.70 MB); each file is below GitHub's
-100 MiB regular-file limit. Checkpoint bytes were checked against the original
-`data/phase1/asset-inventory.json` before and after copying. No weights were
-converted or loaded during packaging.
-
-The original files remain under `data/phase1/objects/checkpoints/sha256/` in the
-experiment repository, at `<first-two-hash-characters>/<sha256>.pt` beneath
-that directory. The table gives the exact SHA-256 identifiers. The other
-20 Phase 1 checkpoints are not included.
-
-The corresponding 36 small original configurations are in `configs/`, named
-by model ID. These include the 16 configurations for the checkpoints below.
-The historical loader also expects the original normalization/inventory
-metadata and experiment layout; this is not a standalone inference bundle.
+All 36 raw checkpoints and their configurations are in `checkpoints/` and `configs/`.
+`checkpoint_mapping.csv` maps model IDs, original filenames, architectures and hashes.
+`../inputs/qm9/normalization.csv` contains the recorded normalization values.
+The 16 models used for MILP inverse design are listed below.
 
 | Checkpoint | Property | Architecture | Bytes | SHA-256 |
 |---|---|---|---:|---|

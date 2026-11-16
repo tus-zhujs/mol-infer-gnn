@@ -1,0 +1,1 @@
+../../../../../../inputs/specifications/I2-fringe.txt

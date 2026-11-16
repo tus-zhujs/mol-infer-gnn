@@ -63,8 +63,13 @@ def write_csv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None
     atomic_write_bytes(path, stream.getvalue().encode("utf-8"), overwrite=True)
 
 
-def completed_attempt(campaign_root: Path, condition_id: str) -> Path | None:
-    root = campaign_root / "runs" / CAMPAIGN_ID / condition_id
+def completed_attempt(campaign_root: Path, condition: dict[str, Any]) -> Path | None:
+    specification = "I5-prime" if condition["population"] == "guided" else condition["instance_id"]
+    condition_directory = (
+        f"{specification}-{condition['target_property']}-"
+        f"{condition['architecture_id']}-range-{condition['range_index']:02d}"
+    )
+    root = campaign_root / "runs" / CAMPAIGN_ID / condition_directory
     attempts = sorted(root.glob("attempt-[0-9][0-9][0-9][0-9]"))
     completed = [path for path in attempts if (path / "COMPLETED.json").is_file()]
     return completed[-1] if completed else None
@@ -285,9 +290,9 @@ class DirectReplay:
                 {
                     "name": checkpoint_id,
                     "model_filename": str(
-                        ASSET_ROOT / checkpoint["destination_path"]
+                        REPOSITORY.parents[1] / checkpoint["path"]
                     ),
-                    "config_filename": str(ASSET_ROOT / config["destination_path"]),
+                    "config_filename": str(REPOSITORY.parents[1] / config["path"]),
                 }
             )
             inverter = create_inverter(loader.type, checkpoint_id)
@@ -405,7 +410,7 @@ def classify_incumbent(
     )
     intended_path = reconstructor.reconstruct(
         attempt,
-        reconstruction_root / f"{condition['condition_id']}-intended",
+        reconstruction_root / f"{attempt.parent.name}-intended",
     )
     intended_supplier = Chem.SDMolSupplier(
         str(intended_path), removeHs=False, sanitize=False
@@ -534,7 +539,7 @@ def main() -> None:
         os.chdir(work)
         try:
             for index, condition in enumerate(conditions, start=1):
-                attempt = completed_attempt(campaign_root, condition["condition_id"])
+                attempt = completed_attempt(campaign_root, condition)
                 if attempt is None:
                     raise RuntimeError(
                         f"missing completed attempt: {condition['condition_id']}"
@@ -604,7 +609,7 @@ def main() -> None:
         smiles, digest = canonical_graph_identity(molecule)
         graph_members[digest].append((row, molecule, smiles))
     graph_ids = {
-        digest: f"graph-{index:04d}-{digest[:12]}"
+        digest: f"graph-{index:04d}"
         for index, digest in enumerate(sorted(graph_members), start=1)
     }
     for digest, members in graph_members.items():

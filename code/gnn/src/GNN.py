@@ -1,4 +1,5 @@
 import os, sys, datetime
+from pathlib import Path
 
 import torch
 import torch.nn.functional as F
@@ -200,7 +201,7 @@ def learn_GNN_selfmade_trainval(
 	#     out_channels=1
 	# )
 
-	config_name = os.path.join(".", "model", f"{output_prefix}_pre_config.txt")
+	config_name = Path(__file__).resolve().parents[3] / "models" / "configs" / f"{output_prefix}_pre_config.txt"
 
 	with open(config_name, 'w') as f:
 		f.write(f"in_channels_FT, {model.in_channels_FT}\n")
@@ -228,7 +229,7 @@ def learn_GNN_selfmade_trainval(
 	print("Number of model parameters: ", count_parameters(model), file=sys.stderr, flush=True)
 
 	if save is True:
-		output_model_name = os.path.join(".", "model", f"{output_prefix}.pth")
+		output_model_name = Path(__file__).resolve().parents[3] / "models" / "checkpoints" / f"{output_prefix}.pth"
 		print(f"The model will be saved as {output_model_name}")
 		print(f"The model will be saved as {output_model_name}", file=sys.stderr, flush=True)
 	else:
@@ -483,7 +484,7 @@ def learn_GNN_selfmade_trainvaltest(
 	#     out_channels=1
 	# )
 
-	config_name = os.path.join(".", "model", f"{output_prefix}_config.txt")
+	config_name = Path(__file__).resolve().parents[3] / "models" / "configs" / f"{output_prefix}_config.txt"
 
 	with open(config_name, 'w') as f:
 		f.write(f"in_channels_FT, {model.in_channels_FT}\n")
@@ -511,7 +512,7 @@ def learn_GNN_selfmade_trainvaltest(
 	print("Number of model parameters: ", count_parameters(model), file=sys.stderr, flush=True)
 
 	if save is True:
-		output_model_name = os.path.join(".", "model", f"{output_prefix}.pth")
+		output_model_name = Path(__file__).resolve().parents[3] / "models" / "checkpoints" / f"{output_prefix}.pth"
 		print(f"The model will be saved as {output_model_name}")
 		print(f"The model will be saved as {output_model_name}", file=sys.stderr, flush=True)
 	else:

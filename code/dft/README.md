@@ -72,8 +72,9 @@ there named `i5_i5prime_candidate_recheck.csv`, as required by the comparison re
 
 ## Outputs
 
-`dft_runs/<engine>/<graph_id>/` contains input metadata, starting/final SDFs,
+`dft_runs/<engine>/graph-<number>/` contains input metadata, starting/final SDFs,
 native logs, `result.json`, and `COMPLETED.json`. Completed matching jobs are reused.
 Engine tables are `dft_psi4_results.csv` and `dft_pyscf_results.csv`; failures and
 structural/frequency rejections are recorded as well as accepted calculations.
 The supplied `../../results/dft_psi4.csv` and `dft_pyscf.csv` can be read without running DFT.
+The 342 completed optimized structures are in `../../results/dft_optimized/`, with graph/engine paths in `index.csv`.

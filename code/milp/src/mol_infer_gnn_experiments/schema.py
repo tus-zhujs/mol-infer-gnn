@@ -126,7 +126,7 @@ def validate_named(value: Any, schema_name: str) -> None:
             value["checkpoint_records"], "logical_asset_id", "$.checkpoint_records"
         )
         _require_unique_key(
-            value["canonical_objects"], "destination_path", "$.canonical_objects"
+            value["checkpoint_records"], "path", "$.checkpoint_records"
         )
         if value["status"] == "ready" and len(value["checkpoint_records"]) != 36:
             raise ContractError("$: ready Phase 1 inventory requires 36 checkpoints")
@@ -146,38 +146,13 @@ def validate_named(value: Any, schema_name: str) -> None:
                 )
             if value["split_record"] is None:
                 raise ContractError("$: ready Phase 1 inventory requires a split")
-            objects = {
-                item["destination_path"]: item for item in value["canonical_objects"]
-            }
-            if value["canonical_checkpoint_file_count"] != len(objects):
-                raise ContractError(
-                    "$: canonical checkpoint file count is inconsistent"
-                )
-            if value["deduplicated_copies_avoided"] != 36 - len(objects):
-                raise ContractError("$: checkpoint deduplication count is inconsistent")
             for record in value["checkpoint_records"]:
-                item = objects.get(record["destination_path"])
-                if (
-                    item is None
-                    or item["sha256"] != record["destination_sha256"]
-                    or record["source_sha256"] != record["destination_sha256"]
-                    or record["logical_asset_id"] not in item["logical_asset_ids"]
-                ):
-                    raise ContractError(
-                        "$: checkpoint record does not match its canonical object"
-                    )
-            if (
-                value["split_record"]["source_sha256"]
-                != value["split_record"]["destination_sha256"]
-            ):
-                raise ContractError("$: split source and destination hashes differ")
-        elif (
-            value["split_record"] is not None
-            or value["canonical_objects"]
-            or value["canonical_checkpoint_file_count"] != 0
-            or value["deduplicated_copies_avoided"] != 0
-        ):
-            raise ContractError("$: pending Phase 1 inventory claims live assets")
+                if record["source_sha256"] != record["sha256"]:
+                    raise ContractError("$: checkpoint source and file hashes differ")
+            if value["split_record"]["source_sha256"] != value["split_record"]["sha256"]:
+                raise ContractError("$: split source and file hashes differ")
+        elif value["split_record"] is not None:
+            raise ContractError("$: pending Phase 1 inventory claims a split")
     elif schema_name == "verification-record":
         status = value["normalized_status"]
         incumbent = value["has_incumbent"]

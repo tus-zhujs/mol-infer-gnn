@@ -16,18 +16,25 @@ Training imports PyTorch, torchvision, PyTorch Geometric, torch-sparse, RDKit,
 NumPy, pandas, SciPy, scikit-learn, and Optuna. Use compatible PyTorch extension builds.
 Keep `src/` and `common_eval/` beside the scripts so local imports resolve.
 
-Obtain the prepared QM9 files from the authors, or prepare equivalent files from QM9:
-`qm9_all.sdf` with matching molecule IDs, `qm9_complete_values.csv` with molecule IDs
-in its first column and named property columns, and `qm9_uncharacterized.csv`
-with an `id` column of excluded QM9 indices. Preserve molecule order and property units;
-the reader applies the conversions defined in the training script.
-Place these files in this directory. They are not included in the package.
+Prepared inputs are in `../../inputs/qm9/`: `qm9_all.sdf.gz`,
+`qm9_complete_values.csv`, and `qm9_uncharacterized.csv`.
+From `code/gnn/`, decompress the SDF and link the three inputs for the existing scripts:
+
+```sh
+gzip -d ../../inputs/qm9/qm9_all.sdf.gz
+ln -s ../../inputs/qm9/qm9_all.sdf .
+ln -s ../../inputs/qm9/qm9_complete_values.csv .
+ln -s ../../inputs/qm9/qm9_uncharacterized.csv .
+```
+
 The supplied `../../inputs/qm9_split_seed42.csv` records the reference split.
+Input sizes and hashes are in `../../inputs/qm9/prepared_inputs.json`;
+recorded normalization is in `../../inputs/qm9/normalization.csv`.
 The scripts recreate the split from ordered, filtered molecules; they do not load that CSV.
 
 ## Training
 
-Run from `code/gnn/` in a writable working copy; create `model/` and `log/` first.
+Run from `code/gnn/` in a writable working copy; create `log/` first.
 The following illustrates the checked CLI syntax, but has not been executed here
 and requires the prepared data and dependencies above:
 
@@ -39,21 +46,17 @@ python GNN_main_qm9.py qm9_all.sdf qm9_complete_values.csv \
 The script uses seed 42, 110,000 training molecules, and 10,000 validation molecules;
 the remainder forms the test set. Training includes an Optuna search.
 `--resume CHECKPOINT` passes an existing checkpoint to the final training stage.
-Outputs include `model/<prefix>.pth`, `model/<prefix>_config.txt`, training logs
+Outputs include `../../models/checkpoints/<prefix>.pth`, `../../models/configs/<prefix>_config.txt`, training logs
 in `log/`, temporary result files, and graph-dataset files under `data/`.
 
 ## Evaluating checkpoints
 
-The evaluator expects all 36 model/config pairs in `model/`, using names such as
-`3_homo_2lay_h16_nodropout.pth` and its matching `_config.txt` file.
-The public `../../models/` uses model-ID names and contains only 16 checkpoints.
-Obtain the other 20 weights and the original filename mapping from the authors,
-and arrange working copies under the names required by `checkpoint_inventory()`.
+The evaluator reads all 36 model/config pairs directly from `../../models/checkpoints/`
+and `../../models/configs/` using `../../models/checkpoint_mapping.csv`.
 For all 36 models, the evaluator accepts `--include-evaluated-properties`,
 `--device cpu` (or `cuda`), and `--output-dir NEW_DIRECTORY`.
 Without that flag it evaluates 24 models and also requires `--existing-hlg-dir`
 containing previous HOMO/LUMO/GAP evaluation records, which are not bundled.
 The two-family evaluator additionally needs models in `../../proceeding/model/`.
-These evaluators cannot run on the included 16-checkpoint folder without adaptation.
 Outputs include metrics CSVs, split metadata, and `per_molecule_predictions/*.csv.gz`.
 Saved paper metrics are available directly in `../../results/gnn_models.csv`.

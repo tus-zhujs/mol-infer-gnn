@@ -1,0 +1,37 @@
+model_id,property,split_id,source_unit,target_unit,conversion_factor,mean,standard_deviation,model_output_space
+journal_mu_2lay_h16,mu,qm9-seed42-v1,D,D,1,2.673311471939087,1.504949688911438,standardized
+journal_mu_2lay_h32,mu,qm9-seed42-v1,D,D,1,2.673311471939087,1.504949688911438,standardized
+journal_mu_3lay_h16,mu,qm9-seed42-v1,D,D,1,2.673311471939087,1.504949688911438,standardized
+journal_mu_3lay_h32,mu,qm9-seed42-v1,D,D,1,2.673311471939087,1.504949688911438,standardized
+journal_alpha_2lay_h16,alpha,qm9-seed42-v1,bohr^3,bohr^3,1,75.2691421508789,8.183764457702637,standardized
+journal_alpha_2lay_h32,alpha,qm9-seed42-v1,bohr^3,bohr^3,1,75.2691421508789,8.183764457702637,standardized
+journal_alpha_3lay_h16,alpha,qm9-seed42-v1,bohr^3,bohr^3,1,75.2691421508789,8.183764457702637,standardized
+journal_alpha_3lay_h32,alpha,qm9-seed42-v1,bohr^3,bohr^3,1,75.2691421508789,8.183764457702637,standardized
+journal_homo_2lay_h16,homo,qm9-seed42-v1,eV,eV,1,-6.537022590637207,0.598167359828949,standardized
+journal_homo_2lay_h32,homo,qm9-seed42-v1,eV,eV,1,-6.537022590637207,0.598167359828949,standardized
+journal_homo_3lay_h16,homo,qm9-seed42-v1,eV,eV,1,-6.537022590637207,0.598167359828949,standardized
+journal_homo_3lay_h32,homo,qm9-seed42-v1,eV,eV,1,-6.537022590637207,0.598167359828949,standardized
+journal_lumo_2lay_h16,lumo,qm9-seed42-v1,eV,eV,1,0.32098451256752014,1.273862600326538,standardized
+journal_lumo_2lay_h32,lumo,qm9-seed42-v1,eV,eV,1,0.32098451256752014,1.273862600326538,standardized
+journal_lumo_3lay_h16,lumo,qm9-seed42-v1,eV,eV,1,0.32098451256752014,1.273862600326538,standardized
+journal_lumo_3lay_h32,lumo,qm9-seed42-v1,eV,eV,1,0.32098451256752014,1.273862600326538,standardized
+journal_gap_2lay_h16,gap,qm9-seed42-v1,eV,eV,1,6.858003616333008,1.2831047773361206,standardized
+journal_gap_2lay_h32,gap,qm9-seed42-v1,eV,eV,1,6.858003616333008,1.2831047773361206,standardized
+journal_gap_3lay_h16,gap,qm9-seed42-v1,eV,eV,1,6.858003616333008,1.2831047773361206,standardized
+journal_gap_3lay_h32,gap,qm9-seed42-v1,eV,eV,1,6.858003616333008,1.2831047773361206,standardized
+journal_r2_2lay_h16,r2,qm9-seed42-v1,bohr^2,bohr^2,1,1189.608154296875,280.9656982421875,standardized
+journal_r2_2lay_h32,r2,qm9-seed42-v1,bohr^2,bohr^2,1,1189.608154296875,280.9656982421875,standardized
+journal_r2_3lay_h16,r2,qm9-seed42-v1,bohr^2,bohr^2,1,1189.608154296875,280.9656982421875,standardized
+journal_r2_3lay_h32,r2,qm9-seed42-v1,bohr^2,bohr^2,1,1189.608154296875,280.9656982421875,standardized
+journal_zpve_2lay_h16,zpve,qm9-seed42-v1,eV,eV,1,4.055604934692383,0.901522159576416,standardized
+journal_zpve_2lay_h32,zpve,qm9-seed42-v1,eV,eV,1,4.055604934692383,0.901522159576416,standardized
+journal_zpve_3lay_h16,zpve,qm9-seed42-v1,eV,eV,1,4.055604934692383,0.901522159576416,standardized
+journal_zpve_3lay_h32,zpve,qm9-seed42-v1,eV,eV,1,4.055604934692383,0.901522159576416,standardized
+journal_cv_2lay_h16,cv,qm9-seed42-v1,cal/(mol K),cal/(mol K),1,31.61431121826172,4.065282821655273,standardized
+journal_cv_2lay_h32,cv,qm9-seed42-v1,cal/(mol K),cal/(mol K),1,31.61431121826172,4.065282821655273,standardized
+journal_cv_3lay_h16,cv,qm9-seed42-v1,cal/(mol K),cal/(mol K),1,31.61431121826172,4.065282821655273,standardized
+journal_cv_3lay_h32,cv,qm9-seed42-v1,cal/(mol K),cal/(mol K),1,31.61431121826172,4.065282821655273,standardized
+journal_u0_atom_2lay_h16,u0_atom,qm9-seed42-v1,eV,eV,1,-76.09854888916016,10.324634552001953,standardized
+journal_u0_atom_2lay_h32,u0_atom,qm9-seed42-v1,eV,eV,1,-76.09854888916016,10.324634552001953,standardized
+journal_u0_atom_3lay_h16,u0_atom,qm9-seed42-v1,eV,eV,1,-76.09854888916016,10.324634552001953,standardized
+journal_u0_atom_3lay_h32,u0_atom,qm9-seed42-v1,eV,eV,1,-76.09854888916016,10.324634552001953,standardized

@@ -136,18 +136,24 @@ def parse_args() -> argparse.Namespace:
 def checkpoint_inventory(selected_ids: set[str] | None = None) -> list[dict[str, object]]:
     selected_ids = selected_ids or set()
     rows: list[dict[str, object]] = []
-    for prop, prefix in PROPERTY_PREFIXES.items():
-        configs = sorted(JOURNAL_MODEL_DIR.glob(f"{prefix}_*nodropout*_config.txt"))
-        if len(configs) != 4:
-            raise AssertionError(f"Expected four {prop} configs, found {len(configs)}")
-        for config_path in configs:
-            checkpoint_path = config_path.with_name(config_path.name.replace("_config.txt", ".pth"))
+    with (JOURNAL_MODEL_DIR / "checkpoint_mapping.csv").open(newline="", encoding="utf-8") as handle:
+        mappings = list(csv.DictReader(handle))
+    for prop in PROPERTY_PREFIXES:
+        models = sorted(
+            (row for row in mappings if row["property"] == prop),
+            key=lambda row: row["original_config_filename"],
+        )
+        if len(models) != 4:
+            raise AssertionError(f"Expected four {prop} configs, found {len(models)}")
+        for mapping in models:
+            config_path = JOURNAL_MODEL_DIR / mapping["configuration"]
+            checkpoint_path = JOURNAL_MODEL_DIR / mapping["checkpoint"]
             if not checkpoint_path.is_file():
                 raise FileNotFoundError(checkpoint_path)
             config = read_config(config_path)
             layers = int(config["num_layers_IN"])
             hidden = int(config["hidden_channels_IN"])
-            model_id = f"journal_{prop}_{layers}lay_h{hidden}"
+            model_id = mapping["model_id"]
             rows.append({
                 "model_id": model_id,
                 "era": "journal",

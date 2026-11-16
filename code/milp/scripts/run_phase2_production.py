@@ -59,10 +59,10 @@ SOLVER_PROFILE = (
 # Publication packaging only: replace the original machine-specific executable path.
 CPLEX = Path(os.environ.get("CPLEX_EXECUTABLE", "cplex"))
 TARGET_MANIFEST_SHA256 = (
-    "39daaaf4897ab0746763d13fb1db099a263cdf34cc353264ba3305e67c52542b"
+    "9a198f8dd61adb5b14299b78e7bb3f6d9313e4d8ef438da3b866cf78fc3371fd"
 )
 CONDITION_MANIFEST_SHA256 = (
-    "b0dfbb9f67cc999f4e92121ab51a1d0bc512f6db44ebffb29715c80b57d12e42"
+    "fc4468374a3f9907a45bc2537ccf7401d09584e2a8c901cea2e6e387e92bd92c"
 )
 CAMPAIGN_ID = "phase2-v2-960-sequential-thread0-20260727"
 TMUX_SESSION = "molgnn-phase2-v2"
@@ -701,7 +701,7 @@ def run(campaign_root: Path) -> None:
             canary_path = (
                 campaign_root
                 / "canary"
-                / f"{index:02d}-{condition['condition_id']}.json"
+                / f"{index:02d}-{attempt.parent.name}.json"
             )
             if canary_path.exists():
                 prior = read_json(canary_path)

@@ -14,7 +14,7 @@ molecules inside a requested property range.
 
 ## Dependencies
 
-Use Python 3.11 or later, `PuLP==2.6.0` (see `requirements.txt`), PyTorch,
+Use Python 3.11 or later on POSIX, `PuLP==2.6.0` (see `requirements.txt`), PyYAML, PyTorch,
 PyTorch Geometric, RDKit, NumPy, and pandas; finalization also uses NetworkX.
 CPLEX 22.1.1 requires a separate installation and valid license.
 Set `CPLEX_EXECUTABLE` to its absolute executable path before starting the runner.
@@ -30,16 +30,16 @@ and the checkpoints/configurations in `../../models/`.
 The I5/I5′ formulation applies the additional restrictions in `phase2/specification.py`.
 
 The runner treats this `code/milp/` directory as its repository root. It expects:
-- `data/phase1/asset-inventory.json` and `config-inventory.json`, including normalization metadata and paths to the model files;
+- `data/phase1/asset-inventory.json` and `config-inventory.json`, including normalization metadata and package-relative model paths;
 - `data/phase2/instances/canonical/` containing instance and fringe-library files;
 - `data/phase2/target_ranges/target-range-manifest.json`;
 - `data/phase2/conditions/production-conditions.jsonl` and `production-manifest.json`.
 
-Obtain the missing inventories and campaign metadata from the authors and restore
-the paths they describe in a separate working copy. Renaming the public checkpoint
-files alone does not supply the missing metadata. Campaign preparation also expects
-`data/phase1/live-parity-result.json`, a Git checkout, and a completed CPLEX acceptance
-attempt with its result and artifact manifest. Those records are not bundled.
+These inventories and input files are included at the paths above. Inventory paths
+are relative to the package root: `models/checkpoints/`, `models/configs/` and `inputs/`.
+`data/phase1/live-parity-result.json` is the recorded historical result, not a new test.
+Campaign preparation still requires its original checkout provenance and a completed
+CPLEX acceptance attempt.
 
 ## Basic use and outputs
 
@@ -48,12 +48,14 @@ with a condition record and the prepared layout; export its returned `problem` u
 PuLP's `writeLP(...)`. This API builds the model without solving it.
 For CPLEX execution, the runner's CLI has `prepare --campaign-root DIR --acceptance-attempt DIR`
 and `run --campaign-root DIR`. These are interface descriptions, not a ready-to-run
-recipe for this package: the external records and layout above must first be supplied.
+recipe for this package: the external execution prerequisites above still apply.
 No end-to-end command has been tested for this publication layout.
 
+Condition folders use `<specification>-<property>-<architecture>-range-<number>`.
 Each condition writes an attempt directory containing `formulation/model.lp`,
 solver commands/logs/solution, status and verification records, and candidate artifacts.
 Finalization accepts `--campaign-root DIR --output-root DIR` and consumes those records.
 Saved results can instead be read from `../../results/milp_conditions.csv` and the candidate CSVs.
+Original per-condition records are in `../../results/milp_records/condition_index.csv`.
 The single-optimization CPLEX adapter is retained; S10 interval/big-M limitations
 remain as described in the top-level README.

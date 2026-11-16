@@ -1,0 +1,1 @@
+{"best_bound":null,"cpu_seconds":0.0,"engine":"CPLEX","engine_version":"22.1.1","exception":null,"has_incumbent":true,"incumbent_count":1,"native_code":"101","native_status":"integer optimal solution","relative_gap":null,"schema_version":"raw-solver-termination/1","termination_reason":"OPTIMAL","wall_seconds":111.23739868216217}

@@ -36,7 +36,7 @@
     "decimal": {"type": "string", "pattern": "-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?"},
     "source": {
       "type": "object", "additionalProperties": false,
-      "required": ["repository_path", "sha256", "source_unit", "conversion_to_physical_unit"],
+      "required": ["sha256", "source_unit", "conversion_to_physical_unit"],
       "properties": {
         "repository_path": {"type": "string", "minLength": 1},
         "sha256": {"$ref": "#/$defs/sha256"},
@@ -49,7 +49,7 @@
       "required": ["split_id", "repository_path", "sha256", "seed"],
       "properties": {
         "split_id": {"const": "qm9-seed42-v1"},
-        "repository_path": {"const": "data/phase1/qm9_split_seed42.csv"},
+        "repository_path": {"const": "inputs/qm9_split_seed42.csv"},
         "sha256": {"$ref": "#/$defs/sha256"},
         "seed": {"const": 42}
       }
@@ -58,7 +58,7 @@
       "type": "object", "additionalProperties": false,
       "required": ["repository_path", "sha256", "standard_deviation_definition"],
       "properties": {
-        "repository_path": {"const": "data/phase1/asset-inventory.json"},
+        "repository_path": {"const": "code/milp/data/phase1/asset-inventory.json"},
         "sha256": {"$ref": "#/$defs/sha256"},
         "standard_deviation_definition": {"const": "sample; correction=1; n=110000"}
       }
